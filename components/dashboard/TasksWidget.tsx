@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Plus, CheckCircle2, Circle, Trash2 } from "lucide-react";
 import type { Task } from "@/types";
+import { useRouter } from "next/navigation";
 
 interface Props {
   tasks: Task[];
@@ -15,17 +16,24 @@ export default function TasksWidget({ tasks: initial, userId, today }: Props) {
   const [tasks, setTasks] = useState<Task[]>(initial);
   const [newTask, setNewTask] = useState("");
   const supabase = createClient();
+  const router = useRouter();
 
   async function addTask(e: React.FormEvent) {
     e.preventDefault();
     if (!newTask.trim()) return;
     const { data } = await supabase
       .from("tasks")
-      .insert({ title: newTask.trim(), user_id: userId, date: today, done: false })
+      .insert({
+        title: newTask.trim(),
+        user_id: userId,
+        date: today,
+        done: false,
+      })
       .select()
       .single();
     if (data) setTasks([...tasks, data]);
     setNewTask("");
+    router.refresh();
   }
 
   async function toggleTask(task: Task) {
@@ -36,11 +44,13 @@ export default function TasksWidget({ tasks: initial, userId, today }: Props) {
       .select()
       .single();
     if (data) setTasks(tasks.map((t) => (t.id === task.id ? data : t)));
+    router.refresh();
   }
 
   async function deleteTask(id: string) {
     await supabase.from("tasks").delete().eq("id", id);
     setTasks(tasks.filter((t) => t.id !== id));
+    router.refresh();
   }
 
   return (
@@ -51,21 +61,28 @@ export default function TasksWidget({ tasks: initial, userId, today }: Props) {
 
       <div className="space-y-1 mb-4 min-h-[120px]">
         {tasks.length === 0 && (
-          <p className="text-gray-600 text-sm py-4 text-center">No tasks yet. Add one below.</p>
+          <p className="text-gray-600 text-sm py-4 text-center">
+            No tasks yet. Add one below.
+          </p>
         )}
         {tasks.map((task) => (
           <div
             key={task.id}
             className="flex items-center gap-3 py-2 px-2 rounded-lg hover:bg-gray-800/40 group transition-colors"
           >
-            <button onClick={() => toggleTask(task)} className="shrink-0 text-gray-500 hover:text-emerald-400 transition-colors">
+            <button
+              onClick={() => toggleTask(task)}
+              className="shrink-0 text-gray-500 hover:text-emerald-400 transition-colors"
+            >
               {task.done ? (
                 <CheckCircle2 className="w-5 h-5 text-emerald-400" />
               ) : (
                 <Circle className="w-5 h-5" />
               )}
             </button>
-            <span className={`flex-1 text-sm ${task.done ? "line-through text-gray-600" : "text-gray-200"}`}>
+            <span
+              className={`flex-1 text-sm ${task.done ? "line-through text-gray-600" : "text-gray-200"}`}
+            >
               {task.title}
             </span>
             <button
