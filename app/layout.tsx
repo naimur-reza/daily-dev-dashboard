@@ -1,0 +1,17 @@
+import type { Metadata } from "next";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "Dev Daily Dashboard",
+  description: "Your personal developer productivity cockpit",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body className="bg-gray-950 text-gray-100 antialiased min-h-screen">
+        {children}
+      </body>
+    </html>
+  );
+}
