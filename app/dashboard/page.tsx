@@ -19,7 +19,9 @@ export const revalidate = 0;
 
 export default async function DashboardPage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) return null;
 
   const today = format(new Date(), "yyyy-MM-dd");
@@ -33,19 +35,42 @@ export default async function DashboardPage() {
     commitCount,
     weather,
   ] = await Promise.all([
-    supabase.from("tasks").select("*").eq("user_id", user.id).eq("date", today).order("created_at"),
-    supabase.from("journal_entries").select("*").eq("user_id", user.id).eq("date", today).single(),
-    supabase.from("habit_logs").select("*").eq("user_id", user.id).gte("date", format(new Date(Date.now() - 28 * 86400000), "yyyy-MM-dd")).order("date"),
-    supabase.from("pomodoro_sessions").select("*").eq("user_id", user.id).eq("date", today),
+    supabase
+      .from("tasks")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("date", today)
+      .order("created_at"),
+    supabase
+      .from("journal_entries")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("date", today)
+      .single(),
+    supabase
+      .from("habit_logs")
+      .select("*")
+      .eq("user_id", user.id)
+      .gte("date", format(new Date(Date.now() - 28 * 86400000), "yyyy-MM-dd"))
+      .order("date"),
+    supabase
+      .from("pomodoro_sessions")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("date", today),
     getOpenPRs(),
     getTodayCommitCount(),
     getWeather(),
   ]);
 
-  const totalFocusMinutes = (pomodoroSessions ?? []).reduce((sum, s) => sum + (s.minutes || 25), 0);
+  const totalFocusMinutes = (pomodoroSessions ?? []).reduce(
+    (sum, s) => sum + (s.minutes || 25),
+    0,
+  );
   const doneTasks = (tasks ?? []).filter((t) => t.done).length;
   const challenge = getDailyChallenge();
-  const quote = getDailyQuote();
+  const quote = await getDailyQuote();
+  console.log("Daily quote:", quote);
   const currentStreak = calculateStreak(habits ?? []);
 
   return (
@@ -57,12 +82,15 @@ export default async function DashboardPage() {
             Good {getGreeting()}, dev 👋
           </h1>
           <p className="text-gray-500 text-sm mt-1">
-            {format(new Date(), "EEEE, MMMM d")} · {tasks?.length ?? 0} tasks today
+            {format(new Date(), "EEEE, MMMM d")} · {tasks?.length ?? 0} tasks
+            today
           </p>
         </div>
         <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
           <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-          <span className="text-emerald-400 text-sm font-medium">{currentStreak} day streak</span>
+          <span className="text-emerald-400 text-sm font-medium">
+            {currentStreak} day streak
+          </span>
         </div>
       </div>
 
@@ -80,7 +108,11 @@ export default async function DashboardPage() {
         <div className="lg:col-span-2">
           <TasksWidget tasks={tasks ?? []} userId={user.id} today={today} />
         </div>
-        <PomodoroWidget sessionCount={(pomodoroSessions ?? []).length} userId={user.id} today={today} />
+        <PomodoroWidget
+          sessionCount={(pomodoroSessions ?? []).length}
+          userId={user.id}
+          today={today}
+        />
       </div>
 
       {/* PRs + Streak */}
@@ -110,7 +142,11 @@ function getGreeting() {
 }
 
 function calculateStreak(habits: { date: string; coded: boolean }[]) {
-  const coded = habits.filter((h) => h.coded).map((h) => h.date).sort().reverse();
+  const coded = habits
+    .filter((h) => h.coded)
+    .map((h) => h.date)
+    .sort()
+    .reverse();
   let streak = 0;
   let current = new Date();
   for (const date of coded) {

@@ -22,7 +22,7 @@ export default function Sidebar({ user }: { user: User }) {
   ];
 
   return (
-    <aside className="w-56 border-r border-gray-800/60 flex flex-col bg-gray-950 py-6 px-4 shrink-0">
+    <aside className="w-56 border-r fixed h-full border-gray-800/60 flex flex-col bg-gray-950 py-6 px-4 shrink-0">
       <div className="flex items-center gap-2.5 mb-8 px-2">
         <div className="p-1.5 bg-emerald-500/10 rounded-md">
           <Terminal className="w-4 h-4 text-emerald-400" />
