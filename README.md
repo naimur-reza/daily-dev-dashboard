@@ -121,7 +121,7 @@ dev-daily-dashboard/
 │   ├── challenges.ts
 │   └── quotes.ts
 ├── types/index.ts
-├── middleware.ts
+├── proxy.ts
 ├── supabase-schema.sql
 └── vercel.json
 ```
