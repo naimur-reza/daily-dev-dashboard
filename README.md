@@ -16,14 +16,14 @@ Your personal developer productivity cockpit. Built with Next.js 15, Supabase, a
 
 ## Tech Stack
 
-| Layer       | Tech                        |
-|-------------|-----------------------------|
-| Framework   | Next.js 15 (App Router)     |
-| Database    | Supabase (Postgres + Auth)  |
-| Styling     | Tailwind CSS v4             |
-| Hosting     | Vercel                      |
-| AI summary  | Anthropic Claude API        |
-| Weather     | OpenWeatherMap API (free)   |
+| Layer      | Tech                       |
+| ---------- | -------------------------- |
+| Framework  | Next.js 16 (App Router)    |
+| Database   | Supabase (Postgres + Auth) |
+| Styling    | Tailwind CSS v4            |
+| Hosting    | Vercel                     |
+| AI summary | Anthropic Claude API       |
+| Weather    | OpenWeatherMap API (free)  |
 
 ## Quick Start
 
@@ -43,16 +43,16 @@ npm install
 
 ### 3. Get your API keys
 
-| Key | Where to get it |
-|-----|----------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Settings → API |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Settings → API |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Settings → API |
-| `GITHUB_TOKEN` | GitHub → Settings → Developer settings → Personal access tokens (scopes: `repo`, `read:user`) |
-| `GITHUB_USERNAME` | Your GitHub username |
-| `NEXT_PUBLIC_WEATHER_API_KEY` | [openweathermap.org](https://openweathermap.org/api) → free tier |
-| `NEXT_PUBLIC_WEATHER_CITY` | Your city name e.g. `Dhaka` |
-| `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com) |
+| Key                             | Where to get it                                                                               |
+| ------------------------------- | --------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SUPABASE_URL`      | Supabase → Settings → API                                                                     |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Settings → API                                                                     |
+| `SUPABASE_SERVICE_ROLE_KEY`     | Supabase → Settings → API                                                                     |
+| `GITHUB_TOKEN`                  | GitHub → Settings → Developer settings → Personal access tokens (scopes: `repo`, `read:user`) |
+| `GITHUB_USERNAME`               | Your GitHub username                                                                          |
+| `NEXT_PUBLIC_WEATHER_API_KEY`   | [openweathermap.org](https://openweathermap.org/api) → free tier                              |
+| `NEXT_PUBLIC_WEATHER_CITY`      | Your city name e.g. `Dhaka`                                                                   |
+| `ANTHROPIC_API_KEY`             | [console.anthropic.com](https://console.anthropic.com)                                        |
 
 ### 4. Set up environment
 
@@ -128,11 +128,11 @@ dev-daily-dashboard/
 
 ## Hosting options
 
-| Option | Cost | Best for |
-|--------|------|----------|
-| Vercel + Supabase free | $0 | This project — perfect fit |
-| Vercel Pro + Supabase | ~$25/mo | More cron jobs, bigger DB |
-| VPS (Hetzner CAX11) | ~$4/mo | Full control, self-hosted |
+| Option                 | Cost    | Best for                   |
+| ---------------------- | ------- | -------------------------- |
+| Vercel + Supabase free | $0      | This project — perfect fit |
+| Vercel Pro + Supabase  | ~$25/mo | More cron jobs, bigger DB  |
+| VPS (Hetzner CAX11)    | ~$4/mo  | Full control, self-hosted  |
 
 ## License
 
