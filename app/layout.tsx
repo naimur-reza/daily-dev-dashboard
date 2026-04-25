@@ -1,15 +1,26 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ServiceWorkerRegistrar from "@/components/ServiceWorkerRegistrar";
 
 export const metadata: Metadata = {
-  title: "Dev Daily Dashboard",
-  description: "Your personal developer productivity cockpit",
+  manifest: "/manifest.json",
+  themeColor: "#030712",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Dev Daily",
+  },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body className="bg-gray-950 text-gray-100 antialiased min-h-screen">
+        <ServiceWorkerRegistrar />
         {children}
       </body>
     </html>

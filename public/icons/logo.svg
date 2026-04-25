@@ -1,0 +1,26 @@
+<svg width="512" height="512" viewBox="0 0 512 512" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>Dev Daily Dashboard logo</title>
+  <rect x="0" y="0" width="512" height="512" rx="80" fill="#030712"/>
+  <rect x="0" y="0" width="512" height="512" rx="80" fill="none" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- terminal prompt -->
+  <text x="93" y="280" font-family="monospace" font-size="110" font-weight="700" fill="#38bdf8">~/</text>
+  <text x="272" y="280" font-family="monospace" font-size="110" font-weight="700" fill="#f1f5f9">_</text>
+
+  <!-- pulse line -->
+  <polyline
+    points="80,360 120,360 148,322 176,395 204,345 232,368 260,333 288,360 370,360 432,360"
+    fill="none"
+    stroke="#38bdf8"
+    stroke-width="4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    opacity="0.7"
+  />
+
+  <!-- dot on peak -->
+  <circle cx="260" cy="333" r="6" fill="#38bdf8"/>
+
+  <!-- label -->
+  <text x="256" y="450" font-family="monospace" font-size="28" fill="#475569" text-anchor="middle" font-weight="400">dev daily</text>
+</svg>
