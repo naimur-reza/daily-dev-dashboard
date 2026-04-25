@@ -4,7 +4,7 @@
   "description": "Your personal developer productivity cockpit",
   "start_url": "/dashboard",
   "display": "standalone",
-  "background_color": "#030712",
+  "background_color": "#0f172a",
   "theme_color": "#030712",
   "orientation": "portrait-primary",
   "icons": [
@@ -55,23 +55,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable any"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Dashboard",
-      "url": "/dashboard",
-      "description": "Go to main dashboard"
-    },
-    {
-      "name": "Jobs",
-      "url": "/dashboard/jobs",
-      "description": "View today's job digest"
-    },
-    {
-      "name": "Planner",
-      "url": "/dashboard/planner",
-      "description": "View weekly plan"
     }
   ],
   "categories": ["productivity", "developer-tools"]
