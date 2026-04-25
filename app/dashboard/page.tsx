@@ -147,10 +147,12 @@ function calculateStreak(habits: { date: string; coded: boolean }[]) {
     .map((h) => h.date)
     .sort()
     .reverse();
+
   let streak = 0;
   let current = new Date();
   for (const date of coded) {
     const d = format(current, "yyyy-MM-dd");
+
     if (date === d) {
       streak++;
       current = new Date(current.getTime() - 86400000);

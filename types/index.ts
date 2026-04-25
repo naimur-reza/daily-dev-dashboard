@@ -67,3 +67,42 @@ export interface DailyChallenge {
   slug: string;
   tags: string[];
 }
+
+export interface Job {
+  id: string;
+  title: string;
+  company: string;
+  company_logo?: string;
+  location: string;
+  url: string;
+  salary?: string;
+  tags: string[];
+  description?: string;
+  source: string;
+  date: string;
+  ai_reason?: string;
+}
+
+export interface JobApplication {
+  id: string;
+  user_id: string;
+  company: string;
+  role: string;
+  location?: string;
+  url?: string;
+  salary?: string;
+  status: "saved" | "applied" | "interview" | "offer" | "rejected" | "ghosted";
+  applied_date: string;
+  notes: string;
+  tags?: string[];
+  created_at: string;
+  updated_at: string;
+}
+
+export type ApplicationStatus =
+  | "saved"
+  | "applied"
+  | "interview"
+  | "offer"
+  | "rejected"
+  | "ghosted";
