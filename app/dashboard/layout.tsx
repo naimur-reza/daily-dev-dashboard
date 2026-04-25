@@ -16,7 +16,9 @@ export default async function DashboardLayout({
   return (
     <div className="flex min-h-screen bg-gray-950">
       <Sidebar user={user} />
-      <main className="flex-1 overflow-auto">{children}</main>
+      {/* On mobile, Sidebar renders a fixed top bar + spacer div (h-14).
+          The main content sits below that naturally. */}
+      <main className="flex-1 overflow-auto min-w-0">{children}</main>
     </div>
   );
 }

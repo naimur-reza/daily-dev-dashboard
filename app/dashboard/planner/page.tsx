@@ -44,7 +44,7 @@ export default function PlannerPage() {
       setHasPlan(true);
     }
     if (data.context) setContext(data.context);
-    if (data.plan?.ai_summary) setSummary(data.plan.ai_summary);
+    // if (data.plan?.ai_summary) setSummary(data.plan.ai_summary);
     setFetching(false);
 
     // Show form if no context yet
@@ -182,12 +182,12 @@ export default function PlannerPage() {
       </div>
 
       {/* AI summary banner */}
-      {summary && !showForm && (
+      {/* {summary && !showForm && (
         <div className="flex items-start gap-3 bg-purple-500/5 border border-purple-500/15 rounded-xl px-4 py-3">
           <Sparkles className="w-4 h-4 text-purple-400 mt-0.5 shrink-0" />
           <p className="text-sm text-purple-300 leading-relaxed">{summary}</p>
         </div>
-      )}
+      )} */}
 
       {/* Context form */}
       {showForm && (

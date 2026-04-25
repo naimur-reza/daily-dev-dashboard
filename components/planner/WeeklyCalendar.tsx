@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { format, isToday, parseISO } from "date-fns";
 import type { PlanBlock } from "@/types/planner";
-import { CATEGORY_META, PRIORITY_META } from "@/lib/planner";
+import { getCategoryMeta, PRIORITY_META } from "@/lib/planner";
 import { CheckCircle2, Circle, Clock } from "lucide-react";
 
 interface Props {
@@ -114,8 +114,7 @@ export default function WeeklyCalendar({ blocks, onToggle }: Props) {
           {selectedBlocks
             .sort((a, b) => a.start_time.localeCompare(b.start_time))
             .map((block) => {
-              const cat =
-                CATEGORY_META[block.category] ?? CATEGORY_META["study"];
+              const cat = getCategoryMeta(block.category);
               const pri =
                 PRIORITY_META[block.priority] ?? PRIORITY_META["medium"];
               return (

@@ -1,7 +1,7 @@
 "use client";
 
 import type { PlanBlock } from "@/types/planner";
-import { CATEGORY_META } from "@/lib/planner";
+import { getCategoryMeta } from "@/lib/planner";
 
 export default function WeeklyStats({ blocks }: { blocks: PlanBlock[] }) {
   const done = blocks.filter((b) => b.done).length;
@@ -56,7 +56,7 @@ export default function WeeklyStats({ blocks }: { blocks: PlanBlock[] }) {
         </p>
         <div className="space-y-2.5">
           {topCategories.map(([cat, hrs]) => {
-            const meta = CATEGORY_META[cat] ?? CATEGORY_META["study"];
+            const meta = getCategoryMeta(cat);
             const pct = totalHrs > 0 ? (hrs / totalHrs) * 100 : 0;
             return (
               <div key={cat}>

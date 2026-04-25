@@ -12,55 +12,133 @@ export function getWeekDates() {
   });
 }
 
+// Derive allowed categories dynamically from user context
+export function deriveCategories(ctx: PlannerContext): string[] {
+  const cats = new Set<string>();
+
+  // Always include job and self-care
+  cats.add("job");
+  cats.add("self");
+  cats.add("leisure");
+
+  const text = [...ctx.goals, ctx.learning_focus, ctx.extra_context]
+    .join(" ")
+    .toLowerCase();
+
+  if (text.match(/react|next|nextjs|frontend|css|ui|tailwind/))
+    cats.add("study");
+  if (text.match(/tutorial|watch|video|course|youtube/)) cats.add("tutorial");
+  if (text.match(/dsa|algorithm|leetcode|problem solving|data structure/))
+    cats.add("dsa");
+  if (text.match(/project|build|app|portfolio|pet project|side project/))
+    cats.add("project");
+  if (text.match(/job|apply|application|interview|cv|resume|career/))
+    cats.add("apply");
+  if (text.match(/node|backend|api|server|express|mongo|database/))
+    cats.add("study");
+  if (text.match(/typescript|javascript|mern|fullstack|full.stack/))
+    cats.add("study");
+
+  // If no specific study type found but user has learning goals, add generic study
+  if (ctx.weekly_study_hrs > 0) cats.add("study");
+  if (ctx.weekly_project_hrs > 0) cats.add("project");
+  if (ctx.weekly_leisure_hrs > 0) cats.add("leisure");
+
+  return Array.from(cats);
+}
+
 export async function generateWeeklyPlan(
   ctx: PlannerContext,
 ): Promise<{ plan: DayPlan[]; summary: string }> {
   const weekDates = getWeekDates();
   const workDaySet = new Set(ctx.work_days.map((d) => d.toLowerCase()));
+  const allowedCategories = deriveCategories(ctx);
 
-  const prompt = `You are an expert productivity coach and life planner. Generate a realistic, balanced weekly schedule for this developer.
+  // Compute excluded topics based on what's NOT in the user's allowed categories
+  const ALL_TOPICS: Record<string, string[]> = {
+    dsa: [
+      "DSA",
+      "algorithms",
+      "LeetCode",
+      "data structures",
+      "problem solving",
+    ],
+    tutorial: ["tutorial", "watch video", "YouTube course"],
+    project: ["pet project", "side project", "portfolio project"],
+    apply: ["job application", "apply to jobs", "job hunt"],
+  };
+  const excludedTopics: string[] = [];
+  for (const [cat, keywords] of Object.entries(ALL_TOPICS)) {
+    if (!allowedCategories.includes(cat)) {
+      excludedTopics.push(...keywords);
+    }
+  }
 
-PERSON CONTEXT:
-- Job: ${ctx.job_start} to ${ctx.job_end} on ${ctx.work_days.join(", ")}
-- Peak productive hours (outside work): ${ctx.peak_hours}
-- Weekly goals: ${ctx.goals.join(", ") || "Get a job, learn new skills, build projects"}
-- Learning focus: ${ctx.learning_focus}
-- Hours to allocate per week:
-  * Studying/learning: ${ctx.weekly_study_hrs}h
-  * Pet project: ${ctx.weekly_project_hrs}h
-  * Leisure/gaming/self: ${ctx.weekly_leisure_hrs}h
+  // Build dynamic rules from context
+  const dynamicRules: string[] = [
+    `On WORKDAYS: block ${ctx.job_start}–${ctx.job_end} as "Work / Job" (category: job)`,
+    `Peak productive hours outside work are ${ctx.peak_hours} — schedule the hardest tasks then`,
+    `Weekly time budget: ${ctx.weekly_study_hrs}h studying, ${ctx.weekly_project_hrs}h on project, ${ctx.weekly_leisure_hrs}h leisure`,
+    `ONLY use these categories: ${allowedCategories.join(", ")} — do NOT invent other categories`,
+    `Every block category MUST be exactly one of: ${allowedCategories.join(" | ")}`,
+    excludedTopics.length > 0
+      ? `STRICTLY FORBIDDEN — do NOT mention these words anywhere in title or notes: ${excludedTopics.join(", ")}`
+      : "",
+    `Write block titles and notes ONLY based on user goals: ${ctx.goals.join("; ")}`,
+    "Always include meal breaks and realistic transitions between blocks",
+    "Never schedule before 7:00 or after 23:00",
+    "Make it realistic — not a burnout schedule. Rest is productive too.",
+    "Weekends get more flexibility and heavier self/leisure allocation",
+  ].filter(Boolean);
+
+  // Only add job application rule if apply is a derived category
+  if (allowedCategories.includes("apply")) {
+    dynamicRules.push(
+      "Include 30min job application blocks on weekdays after work",
+    );
+  }
+
+  // Only add tutorial rule if tutorial is a derived category
+  if (allowedCategories.includes("tutorial")) {
+    dynamicRules.push(
+      "Tutorial blocks work well in evenings or after work when energy is lower",
+    );
+  }
+
+  const prompt = `You are an expert productivity coach. Generate a realistic weekly schedule for this person.
+
+PERSON'S CONTEXT:
+- Job hours: ${ctx.job_start}–${ctx.job_end} on ${ctx.work_days.join(", ")}
+- Peak productive time (outside work): ${ctx.peak_hours}
+- Goals: ${ctx.goals.length > 0 ? ctx.goals.join("; ") : "Not specified"}
+- Learning focus: ${ctx.learning_focus || "General"}
 - Extra context: ${ctx.extra_context || "None"}
+- Weekly hours budget: ${ctx.weekly_study_hrs}h study, ${ctx.weekly_project_hrs}h project, ${ctx.weekly_leisure_hrs}h leisure
 
-WEEK TO PLAN:
-${weekDates.map((d) => `${d.day} ${d.date} (${workDaySet.has(d.day.toLowerCase()) ? "WORKDAY" : "OFF"})`).join("\n")}
+WEEK:
+${weekDates.map((d) => `${d.day} ${d.date} — ${workDaySet.has(d.day.toLowerCase()) ? "WORKDAY" : "DAY OFF"}`).join("\n")}
 
-RULES:
-1. On WORKDAYS: block ${ctx.job_start}–${ctx.job_end} as "Work / Job" category "job"
-2. Use peak hours (${ctx.peak_hours}) for hardest tasks (DSA, deep study, complex coding)
-3. After work (5pm–7pm): lighter tasks (tutorials, review, job applications)
-4. Evenings (7pm–9pm): project work or leisure
-5. Weekends: heavier study blocks + project time + good leisure
-6. Always include breaks, meals, and at least 1h leisure daily
-7. Include job application time (30min daily on weekdays)
-8. Balance: React/Next.js study, DSA practice, pet project, tutorials, rest
-9. Never schedule past 11pm or before 7am
-10. Make it REALISTIC — not a superhero schedule
+STRICT RULES (follow exactly):
+${dynamicRules.map((r, i) => `${i + 1}. ${r}`).join("\n")}
 
-Return ONLY this JSON structure, no explanation:
+ALLOWED CATEGORIES (use ONLY these exact strings):
+${allowedCategories.map((c) => `"${c}"`).join(", ")}
+
+Return ONLY valid JSON. No markdown. No explanation. No extra text. Structure:
 {
-  "summary": "2-3 sentence encouraging summary of this week's plan",
+  "summary": "2 sentence encouraging summary",
   "plan": [
     {
       "date": "YYYY-MM-DD",
       "day": "Monday",
       "blocks": [
         {
-          "start_time": "07:00",
-          "end_time": "08:00",
-          "title": "Block title",
-          "category": "study|project|job|leisure|self|apply|dsa|tutorial",
+          "start_time": "HH:MM",
+          "end_time": "HH:MM",
+          "title": "descriptive block title",
+          "category": "one of the allowed categories above",
           "priority": "critical|high|medium|low",
-          "notes": "brief tip or context"
+          "notes": "one short tip"
         }
       ]
     }
@@ -76,12 +154,14 @@ Return ONLY this JSON structure, no explanation:
     body: JSON.stringify({
       model: "llama-3.3-70b-versatile",
       max_tokens: 4000,
-      temperature: 0.7,
+      temperature: 0.5,
       messages: [
         {
           role: "system",
-          content:
-            "You are a productivity coach. Return only valid JSON, no markdown, no explanation.",
+          content: `You are a strict schedule generator. Return ONLY valid JSON, no markdown, no explanation.
+CRITICAL RULE 1: Only use these exact category string values: ${allowedCategories.join(", ")}. Any other value is a violation.
+CRITICAL RULE 2: ${excludedTopics.length > 0 ? `Never write these words in any title or notes field: ${excludedTopics.join(", ")}` : "Follow all user goals exactly."} 
+CRITICAL RULE 3: Base all content strictly on the user's stated goals. Do not assume or add topics the user did not mention.`,
         },
         { role: "user", content: prompt },
       ],
@@ -94,8 +174,20 @@ Return ONLY this JSON structure, no explanation:
 
   try {
     const parsed = JSON.parse(cleaned);
+
+    // Sanitize: strip any blocks with categories not in allowedCategories
+    const allowedSet = new Set(allowedCategories);
+    const sanitizedPlan: DayPlan[] = (parsed.plan ?? []).map(
+      (day: DayPlan) => ({
+        ...day,
+        blocks: (day.blocks ?? []).filter((b: RawBlock) =>
+          allowedSet.has(b.category),
+        ),
+      }),
+    );
+
     return {
-      plan: parsed.plan ?? [],
+      plan: sanitizedPlan,
       summary: parsed.summary ?? "Your week is planned!",
     };
   } catch {
@@ -104,15 +196,16 @@ Return ONLY this JSON structure, no explanation:
 }
 
 export function getDailyMessage(blocks: RawBlock[], day: string): string {
-  const priorities = blocks.filter(
+  const priority = blocks.find(
     (b) => b.priority === "critical" || b.priority === "high",
   );
   const first = blocks[0];
   if (!first) return `Good morning! Have a great ${day}.`;
-  return `Good morning! Today: start with "${priorities[0]?.title ?? first.title}" at ${first.start_time}. You have ${blocks.length} blocks planned. Let's go! 💪`;
+  return `Good morning! Today: start with "${priority?.title ?? first.title}" at ${first.start_time}. You have ${blocks.length} blocks planned. Let's go! 💪`;
 }
 
-export const CATEGORY_META: Record<
+// Dynamically build CATEGORY_META from allowed categories
+const BASE_CATEGORY_META: Record<
   string,
   { label: string; color: string; bg: string; border: string; emoji: string }
 > = {
@@ -173,6 +266,27 @@ export const CATEGORY_META: Record<
     emoji: "🧘",
   },
 };
+
+// Fallback for any unexpected category AI returns
+const FALLBACK_META = {
+  label: "Task",
+  color: "text-gray-400",
+  bg: "bg-gray-500/10",
+  border: "border-gray-500/30",
+  emoji: "📌",
+};
+
+export function getCategoryMeta(category: string) {
+  return BASE_CATEGORY_META[category] ?? FALLBACK_META;
+}
+
+// Only return meta for categories the user actually has
+export function getActiveCategoryMeta(ctx: PlannerContext) {
+  const allowed = deriveCategories(ctx);
+  return Object.fromEntries(
+    allowed.map((cat) => [cat, BASE_CATEGORY_META[cat] ?? FALLBACK_META]),
+  );
+}
 
 export const PRIORITY_META: Record<string, { color: string; dot: string }> = {
   critical: { color: "text-red-400", dot: "bg-red-400" },

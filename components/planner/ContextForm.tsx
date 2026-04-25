@@ -9,18 +9,12 @@ const DEFAULT_CONTEXT: PlannerContext = {
   job_end: "17:00",
   work_days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
   peak_hours: "9am-12pm",
-  goals: [
-    "Get a frontend/fullstack job",
-    "Learn React & Next.js deeply",
-    "Build pet project",
-    "Practice DSA daily",
-  ],
+  goals: [],
   weekly_study_hrs: 10,
   weekly_project_hrs: 6,
   weekly_leisure_hrs: 8,
-  learning_focus: "React, Next.js, DSA, Node.js, Pet Project — balanced",
-  extra_context:
-    "I am a job seeker based in Dhaka, Bangladesh. I work 10am-5pm. I want to study in the morning before work (9am-10am) and after work. Weekends are for deep study and project work. I also want time to relax, play games, and spend time with myself.",
+  learning_focus: "",
+  extra_context: "",
 };
 
 const ALL_DAYS = [
@@ -200,6 +194,23 @@ export default function ContextForm({ initial, onGenerate, loading }: Props) {
             <Plus className="w-4 h-4" />
           </button>
         </div>
+      </div>
+
+      {/* Learning focus */}
+      <div>
+        <label className="block text-xs text-gray-500 uppercase tracking-widest mb-2">
+          What do you want to learn?{" "}
+          <span className="text-gray-700">(be specific)</span>
+        </label>
+        <input
+          value={ctx.learning_focus}
+          onChange={(e) => setCtx({ ...ctx, learning_focus: e.target.value })}
+          placeholder="e.g. React, Next.js, Node.js, TypeScript, building full-stack apps"
+          className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-emerald-500 transition-colors"
+        />
+        <p className="text-xs text-gray-700 mt-1">
+          Only mention topics you actually want — AI will schedule exactly this.
+        </p>
       </div>
 
       {/* Extra context */}
