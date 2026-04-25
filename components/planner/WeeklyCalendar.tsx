@@ -79,15 +79,15 @@ export default function WeeklyCalendar({ blocks, onToggle }: Props) {
       {/* Selected day header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-base font-semibold text-white">
+          <h3 className="text-sm lg:text-base font-semibold text-white">
             {format(parseISO(selectedDate), "EEEE, MMMM d")}
             {isToday(parseISO(selectedDate)) && (
-              <span className="ml-2 text-xs px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full">
+              <span className="ml-2 text-[0.625rem] lg:text-xs px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full">
                 Today
               </span>
             )}
           </h3>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-[0.625rem] lg:text-xs text-gray-500 mt-0.5">
             {doneCount}/{totalCount} blocks done
           </p>
         </div>
@@ -106,7 +106,7 @@ export default function WeeklyCalendar({ blocks, onToggle }: Props) {
 
       {/* Time blocks */}
       {selectedBlocks.length === 0 ? (
-        <div className="text-center py-12 text-gray-600 text-sm">
+        <div className="text-center py-12 text-gray-600 text-xs lg:text-sm">
           No blocks planned for this day.
         </div>
       ) : (
@@ -140,12 +140,12 @@ export default function WeeklyCalendar({ blocks, onToggle }: Props) {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
                       <span
-                        className={`text-sm font-medium ${block.done ? "line-through text-gray-600" : "text-white"}`}
+                        className={`text-xs lg:text-sm font-medium ${block.done ? "line-through text-gray-600" : "text-white"}`}
                       >
                         {cat.emoji} {block.title}
                       </span>
                       <span
-                        className={`text-xs px-1.5 py-0.5 rounded ${cat.bg} ${cat.color}`}
+                        className={`text-xs lg:text-sm px-1.5 py-0.5 rounded ${cat.bg} ${cat.color}`}
                       >
                         {cat.label}
                       </span>
@@ -153,17 +153,17 @@ export default function WeeklyCalendar({ blocks, onToggle }: Props) {
                         <div
                           className={`w-1.5 h-1.5 rounded-full ${pri.dot}`}
                         />
-                        <span className={`text-xs ${pri.color}`}>
+                        <span className={`text-xs lg:text-sm ${pri.color}`}>
                           {block.priority}
                         </span>
                       </span>
                     </div>
-                    <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
+                    <div className="flex items-center gap-1 text-xs lg:text-sm text-gray-500 mb-1">
                       <Clock className="w-3 h-3" />
                       {block.start_time} – {block.end_time}
                     </div>
                     {block.notes && (
-                      <p className="text-xs text-gray-500 leading-relaxed">
+                      <p className="text-xs lg:text-sm text-gray-500 leading-relaxed">
                         {block.notes}
                       </p>
                     )}

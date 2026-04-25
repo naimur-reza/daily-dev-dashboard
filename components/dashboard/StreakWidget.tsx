@@ -12,7 +12,11 @@ interface Props {
   today: string;
 }
 
-export default function StreakWidget({ habits: initial, userId, today }: Props) {
+export default function StreakWidget({
+  habits: initial,
+  userId,
+  today,
+}: Props) {
   const [habits, setHabits] = useState(initial);
   const supabase = createClient();
 
@@ -21,7 +25,11 @@ export default function StreakWidget({ habits: initial, userId, today }: Props) 
 
   async function toggleToday() {
     if (todayLogged) {
-      await supabase.from("habit_logs").delete().eq("user_id", userId).eq("date", today);
+      await supabase
+        .from("habit_logs")
+        .delete()
+        .eq("user_id", userId)
+        .eq("date", today);
       setHabits(habits.filter((h) => h.date !== today));
     } else {
       const { data } = await supabase
@@ -35,7 +43,7 @@ export default function StreakWidget({ habits: initial, userId, today }: Props) 
 
   const streak = calculateStreak(codedDates);
   const days = Array.from({ length: 28 }, (_, i) =>
-    format(subDays(new Date(), 27 - i), "yyyy-MM-dd")
+    format(subDays(new Date(), 27 - i), "yyyy-MM-dd"),
   );
 
   return (
@@ -43,11 +51,13 @@ export default function StreakWidget({ habits: initial, userId, today }: Props) 
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Flame className="w-4 h-4 text-amber-400" />
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-widest">Coding streak</h2>
+          <h2 className="text-xs lg:text-sm font-medium text-gray-400 uppercase tracking-widest">
+            Coding streak
+          </h2>
         </div>
         <button
           onClick={toggleToday}
-          className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
+          className={`text-[0.625rem] lg:text-xs px-3 py-1.5 rounded-full border transition-colors ${
             todayLogged
               ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
               : "border-gray-700 text-gray-500 hover:text-gray-300 hover:border-gray-500"
@@ -77,7 +87,9 @@ export default function StreakWidget({ habits: initial, userId, today }: Props) 
           <div className="text-xs text-gray-500">current streak</div>
         </div>
         <div>
-          <div className="text-xl font-semibold text-white">{codedDates.size}</div>
+          <div className="text-xl font-semibold text-white">
+            {codedDates.size}
+          </div>
           <div className="text-xs text-gray-500">days this month</div>
         </div>
       </div>

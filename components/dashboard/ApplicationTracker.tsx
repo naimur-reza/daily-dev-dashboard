@@ -159,9 +159,9 @@ export default function ApplicationTracker() {
         </h2>
         <button
           onClick={() => setShowAdd(!showAdd)}
-          className="flex items-center gap-2 text-sm px-4 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 rounded-lg text-emerald-400 transition-colors"
+          className="flex items-center gap-2 text-xs lg:text-sm px-4 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 rounded-lg text-emerald-400 transition-colors"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="size-3 lg:size-4" />
           Add application
         </button>
       </div>
@@ -172,7 +172,7 @@ export default function ApplicationTracker() {
           onSubmit={addApplication}
           className="bg-gray-900 border border-gray-800/60 rounded-xl p-5 space-y-3"
         >
-          <h3 className="text-sm font-medium text-white mb-3">
+          <h3 className="text-xs lg:text-sm font-medium text-white mb-3">
             New application
           </h3>
           <div className="grid grid-cols-2 gap-3">

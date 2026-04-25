@@ -76,19 +76,19 @@ export default async function DashboardPage() {
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mt-10">
         <div>
-          <h1 className="text-2xl font-semibold text-white">
+          <h1 className="lg:text-2xl text-lg font-semibold text-white ">
             Good {getGreeting()}, dev 👋
           </h1>
-          <p className="text-gray-500 text-sm mt-1">
+          <p className="text-gray-500 text-xs lg:text-sm mt-1 ">
             {format(new Date(), "EEEE, MMMM d")} · {tasks?.length ?? 0} tasks
             today
           </p>
         </div>
         <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
           <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-          <span className="text-emerald-400 text-sm font-medium">
+          <span className="text-emerald-400 text-xs lg:text-sm font-medium  ">
             {currentStreak} day streak
           </span>
         </div>

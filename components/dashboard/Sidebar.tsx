@@ -99,7 +99,7 @@ export default function Sidebar({ user }: { user: User }) {
       <div className="hidden lg:block w-56 shrink-0" />
 
       {/* ── MOBILE: fixed top bar ── */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 h-14 bg-gray-950 border-b border-gray-800/60">
+      <div className="lg:hidden fixed  top-0 left-0 right-0 z-40 flex items-center justify-between px-4 h-14 bg-gray-950  border-b border-gray-800/60">
         <div className="flex items-center gap-2.5">
           <div className="p-1.5 bg-emerald-500/10 rounded-md">
             <Terminal className="w-4 h-4 text-emerald-400" />

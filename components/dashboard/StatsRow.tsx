@@ -1,4 +1,9 @@
-import { GitCommitHorizontal, Clock, GitPullRequest, CheckSquare } from "lucide-react";
+import {
+  GitCommitHorizontal,
+  Clock,
+  GitPullRequest,
+  CheckSquare,
+} from "lucide-react";
 
 interface Props {
   commitCount: number;
@@ -8,10 +13,17 @@ interface Props {
   totalTasks: number;
 }
 
-export default function StatsRow({ commitCount, focusMinutes, openPRs, doneTasks, totalTasks }: Props) {
+export default function StatsRow({
+  commitCount,
+  focusMinutes,
+  openPRs,
+  doneTasks,
+  totalTasks,
+}: Props) {
   const focusHours = Math.floor(focusMinutes / 60);
   const focusMins = focusMinutes % 60;
-  const focusStr = focusHours > 0 ? `${focusHours}h ${focusMins}m` : `${focusMins}m`;
+  const focusStr =
+    focusHours > 0 ? `${focusHours}h ${focusMins}m` : `${focusMins}m`;
 
   const stats = [
     {
@@ -51,14 +63,21 @@ export default function StatsRow({ commitCount, focusMinutes, openPRs, doneTasks
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {stats.map(({ label, value, sub, icon: Icon, color, bg }) => (
-        <div key={label} className="bg-gray-900 border border-gray-800/60 rounded-xl p-4">
+        <div
+          key={label}
+          className="bg-gray-900 border border-gray-800/60 rounded-xl p-4"
+        >
           <div className="flex items-center gap-2 mb-3">
             <div className={`p-1.5 rounded-md ${bg}`}>
               <Icon className={`w-4 h-4 ${color}`} />
             </div>
-            <span className="text-xs text-gray-500 uppercase tracking-widest">{label}</span>
+            <span className="text-[0.625rem] lg:text-xs text-gray-500 uppercase tracking-widest">
+              {label}
+            </span>
           </div>
-          <div className="text-2xl font-semibold text-white">{value}</div>
+          <div className="text-lg lg:text-2xl font-semibold text-white">
+            {value}
+          </div>
           <div className="text-xs text-gray-600 mt-1">{sub}</div>
         </div>
       ))}

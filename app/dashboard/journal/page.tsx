@@ -18,11 +18,13 @@ export default async function JournalPage() {
     .limit(30);
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 max-w-4xl mx-auto mt-10">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
           <BookOpen className="w-5 h-5 text-emerald-400" />
-          <h1 className="text-xl font-semibold text-white">Journal history</h1>
+          <h1 className=" lg:text-xl font-semibold text-white">
+            Journal history
+          </h1>
         </div>
         <WeeklySummaryButton />
       </div>

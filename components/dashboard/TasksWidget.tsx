@@ -55,7 +55,7 @@ export default function TasksWidget({ tasks: initial, userId, today }: Props) {
 
   return (
     <div className="bg-gray-900 border border-gray-800/60 rounded-xl p-5">
-      <h2 className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-4">
+      <h2 className="text-xs lg:text-sm font-medium text-gray-400 uppercase tracking-widest mb-4">
         Today&apos;s tasks
       </h2>
 

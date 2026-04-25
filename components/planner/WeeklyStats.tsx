@@ -26,7 +26,7 @@ export default function WeeklyStats({ blocks }: { blocks: PlanBlock[] }) {
 
   return (
     <div className="bg-gray-900 border border-gray-800/60 rounded-xl p-5">
-      <h3 className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-4">
+      <h3 className="text-xs lg:text-sm font-medium text-gray-400 uppercase tracking-widest mb-4">
         Week overview
       </h3>
 
