@@ -5,10 +5,14 @@ import ServiceWorkerRegistrar from "@/components/ServiceWorkerRegistrar";
 export const metadata: Metadata = {
   manifest: "/manifest.json",
   themeColor: "#030712",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Dev Daily",
+  },
+  formatDetection: {
+    telephone: false,
   },
 };
 
