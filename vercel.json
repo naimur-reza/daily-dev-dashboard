@@ -1,12 +1,7 @@
 {
   "crons": [
-    {
-      "path": "/api/weekly-summary",
-      "schedule": "0 9 * * 1"
-    },
-    {
-      "path": "/api/jobs",
-      "schedule": "0 8 * * *"
-    }
+    { "path": "/api/weekly-summary", "schedule": "0 9 * * 1" },
+    { "path": "/api/jobs", "schedule": "0 8 * * *" },
+    { "path": "/api/planner", "schedule": "0 20 * * 0" }
   ]
 }

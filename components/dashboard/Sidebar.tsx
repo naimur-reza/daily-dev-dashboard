@@ -6,6 +6,7 @@ import {
   BookOpen,
   LogOut,
   Briefcase,
+  BrainCircuit,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, usePathname } from "next/navigation";
@@ -26,6 +27,7 @@ export default function Sidebar({ user }: { user: User }) {
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/dashboard/journal", label: "Journal", icon: BookOpen },
     { href: "/dashboard/jobs", label: "Jobs", icon: Briefcase },
+    { href: "/dashboard/planner", label: "Planner", icon: BrainCircuit },
   ];
 
   return (
